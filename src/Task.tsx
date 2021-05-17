@@ -38,16 +38,12 @@ export const Checkbox = styled.input`
   align-self: center;
 `;
 
-export const Button = styled.button`
-  margin-left: 5px;
+export const Title = styled.h3`
+  width: 100%;
 `;
 
-export const Flex = styled.div<{
-  justifyContent?: 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
-}>`
-  width: 100%;
-  display: flex;
-  ${({ justifyContent }) => (justifyContent && `justify-content: ${justifyContent};`)}
+export const Button = styled.button`
+  margin-left: 5px;
 `;
 
 export const StyledTask = styled.li`
@@ -62,6 +58,10 @@ export const StyledTask = styled.li`
   };
 `;
 
-export const Title = styled.h3`
+export const Flex = styled.div<{
+  justifyContent?: 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+}>`
   width: 100%;
+  display: flex;
+  ${({ justifyContent }) => (justifyContent && `justify-content: ${justifyContent};`)}
 `;
