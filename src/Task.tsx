@@ -21,12 +21,36 @@ export class Task extends React.Component<Props, TState>{
     const { title, id, isCompleted } = this.props;
     return (
       <StyledTask key={id}>
-        {title}
-        <input type="checkbox" id="completed" checked={isCompleted} />
+        <Flex>
+          <Title>{title}</Title>
+          <Checkbox type="checkbox" id="completed" checked={isCompleted} />
+        </Flex>
+        <Flex>
+          <Button>Remove</Button>
+          <Button>Edit</Button>
+        </Flex>
       </StyledTask>
     );
   }
 };
+
+export const Checkbox = styled.input`
+  position: absolute;
+  right: 0;
+`;
+export const Title = styled.h3`
+  background: #efd
+`;
+
+export const Button = styled.button`
+  margin-left: 5px;
+`;
+
+export const Flex = styled.div`
+  position: relative;
+  display: flex;
+`;
+
 
 export const StyledTask = styled.li`
   display: flex;
