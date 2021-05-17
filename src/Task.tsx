@@ -25,7 +25,7 @@ export class Task extends React.Component<Props, TState>{
           <Title>{title}</Title>
           <Checkbox type="checkbox" id="completed" checked={isCompleted} />
         </Flex>
-        <Flex>
+        <Flex justifyContent='flex-end'>
           <Button>Remove</Button>
           <Button>Edit</Button>
         </Flex>
@@ -35,26 +35,24 @@ export class Task extends React.Component<Props, TState>{
 };
 
 export const Checkbox = styled.input`
-  position: absolute;
-  right: 0;
-`;
-export const Title = styled.h3`
-  background: #efd
+  align-self: center;
 `;
 
 export const Button = styled.button`
   margin-left: 5px;
 `;
 
-export const Flex = styled.div`
-  position: relative;
+export const Flex = styled.div<{
+  justifyContent?: 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+}>`
+  width: 100%;
   display: flex;
+  ${({ justifyContent }) => (justifyContent && `justify-content: ${justifyContent};`)}
 `;
-
 
 export const StyledTask = styled.li`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   border: solid black 1px;
   padding: 5px;
   border-radius: 3px;
@@ -62,4 +60,8 @@ export const StyledTask = styled.li`
   &:last-child {
     margin-bottom: 0;
   };
+`;
+
+export const Title = styled.h3`
+  width: 100%;
 `;
