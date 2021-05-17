@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import './App.css';
 import { TaskList } from './TaskList';
 
@@ -37,14 +38,18 @@ class App extends React.Component<{}, TState> {
 
   render() {
     return (
-      <div className="App">
+      <StyledApp>
         <h1>Todo List</h1>
         <input type="text" name="new task name" placeholder="Enter the task name" onChange={this.handleChange} />
         <button onClick={this.handleClick}>Add task</button>
         <TaskList tasks={this.state.taskList} />
-      </div>
+      </StyledApp>
     );
   }
 };
 
 export default App;
+
+export const StyledApp = styled.section`
+  padding: 0 20px;
+`;
