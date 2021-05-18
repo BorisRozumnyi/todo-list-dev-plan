@@ -17,9 +17,9 @@ it('renders learn react link', () => {
 it('adding the new tasks, removing, checking', () => {
   render(<App />);
   expect(screen.getByRole('list').childElementCount).toBe(0);
-  const input = screen.getByPlaceholderText("Enter the task name");
+  const input = screen.getByPlaceholderText('Enter the task name');
   fireEvent.change(input, { target: { value: 'task 1' } });
-  expect(input.value).toBe('task 1')
+  expect(input.value).toBe('task 1');
   fireEvent.click(screen.getByText(/add task/i));
   expect(screen.getByRole('list').childElementCount).toBe(1);
   expect(screen.getByText('task 1')).toBeInTheDocument();

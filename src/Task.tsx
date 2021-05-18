@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { TTask, TRemove } from "./App";
+import React from 'react';
+import styled from 'styled-components';
+import { TTask } from './App';
 
 type Props = {
   title: string; isCompleted: boolean, id: number,
@@ -35,7 +35,7 @@ export class Task extends React.Component<Props, TState>{
       </StyledTask>
     );
   }
-};
+}
 
 export const Checkbox = styled.input`
   align-self: center;

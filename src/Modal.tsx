@@ -18,16 +18,16 @@ export class Modal extends React.Component<Props, TState> {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSaveEdit = this.handleSaveEdit.bind(this);
-  };
+  }
 
   handleChange(e: React.FormEvent<HTMLInputElement>) {
     const { value } = e.currentTarget;
     this.setState({ newTaskValue: value });
-  };
+  }
 
   handleSaveEdit() {
     console.log('===');
-  };
+  }
 
   render() {
     const { task, close } = this.props;
@@ -41,7 +41,7 @@ export class Modal extends React.Component<Props, TState> {
       </StyledModal>
     );
   }
-};
+}
 
 const StyledModal = styled.section`
   position: fixed;
