@@ -43,6 +43,8 @@ it('adding the new tasks, removing, checking', () => {
   expect(screen.queryByText(/edit todo/i)).toBeNull();
   fireEvent.click(screen.getAllByText(/edit/i)[0]);
   expect(screen.queryByText(/edit todo/i)).toBeInTheDocument();
+  fireEvent.click(screen.getByTestId('close-edit-modal'));
+  expect(screen.queryByText(/edit todo/i)).toBeNull();
 });
 
 it('Task is rendered', () => {

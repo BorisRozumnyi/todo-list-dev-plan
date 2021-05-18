@@ -11,7 +11,6 @@ export type TRemove = {
   remove: (id: number) => void;
 };
 
-
 type TState = { editingTask?: TTask, taskList: TTask[], newTaskValue: string };
 
 class App extends React.Component<{}, TState> {
@@ -22,14 +21,9 @@ class App extends React.Component<{}, TState> {
       taskList: [],
       newTaskValue: '',
     };
-    this.handleClick = this.handleClick.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleRemove = this.handleRemove.bind(this);
-    this.handelCheck = this.handelCheck.bind(this);
-    this.handleOpenEdit = this.handleOpenEdit.bind(this);
   };
 
-  handleClick() {
+  handleClick = () => {
     const { newTaskValue } = this.state;
     const newTask = {
       title: newTaskValue, isCompleted: false, id: Date.now(),
@@ -38,18 +32,18 @@ class App extends React.Component<{}, TState> {
     this.setState({ taskList: tasks })
   };
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     this.setState({ newTaskValue: value });
   };
 
-  handleRemove(id: number) {
+  handleRemove = (id: number) => {
     const { taskList } = this.state;
     const filtered = taskList.filter(task => task.id !== id);
     this.setState({ taskList: filtered });
   };
 
-  handelCheck(id: number) {
+  handelCheck = (id: number) => {
     const { taskList } = this.state;
     const maped = taskList.map((task) => {
       if (task.id === id) task.isCompleted = !task.isCompleted;
@@ -58,22 +52,26 @@ class App extends React.Component<{}, TState> {
     this.setState({ taskList: maped });
   };
 
-  handleOpenEdit(id: number) {
+  handleOpenEdit = (id: number) => {
     const { taskList } = this.state;
     const finded = taskList.find((task) => task.id === id);
     this.setState({ editingTask: finded });
   };
 
+  handleCloseEdit = () => {
+    this.setState({ editingTask: undefined });
+  };
+
   render() {
     const { taskList, editingTask } = this.state;
-    const { handleClick, handleOpenEdit, handelCheck, handleChange, handleRemove } = this;
+    const { handleClick, handleOpenEdit, handelCheck, handleChange, handleRemove, handleCloseEdit } = this;
     return (
       <StyledApp>
         <h1>Todo List</h1>
         <input type="text" name="new task name" placeholder="Enter the task name" onChange={handleChange} />
         <button onClick={handleClick}>Add task</button>
         <TaskList tasks={taskList} remove={handleRemove} check={handelCheck} openEdit={handleOpenEdit}/>
-        {editingTask && <Modal />}
+        {editingTask && <Modal task={editingTask} close={handleCloseEdit} />}
       </StyledApp>
     );
   }
