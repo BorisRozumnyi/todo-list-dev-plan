@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { TTask } from "./App";
+import { TTask, TRemove } from "./App";
 import { Task } from "./Task";
 
 type Props = {
   tasks: TTask[];
 };
 
-export const TaskList: React.FC<Props> = ({ tasks }) => (
+export const TaskList: React.FC<Props & TRemove> = ({ tasks, remove }) => (
   <List>
     {tasks.map(({ title, isCompleted, id }) => {
-      const props = { title, isCompleted, id };
-      return <Task {...props} />
+      const props = { title, isCompleted, id, remove };
+      return <Task key={id} {...props} />
     })}
   </List>
 );
