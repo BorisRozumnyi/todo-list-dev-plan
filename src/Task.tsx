@@ -23,11 +23,11 @@ export class Task extends React.Component<Props & TRemove, TState>{
     const { title, id, isCompleted, remove, check } = this.props;
     return (
       <StyledTask key={id}>
-        <Flex>
-          <Title>{title}</Title>
+        <Flex width='80%'>
           <Checkbox type="checkbox" id="completed" checked={isCompleted} onChange={() => check(id)} />
+          <Title>{title}</Title>
         </Flex>
-        <Flex justifyContent='flex-end'>
+        <Flex width='20%' justifyContent='flex-end'>
           <Button onClick={() => remove(id)}>Remove</Button>
           <Button>Edit</Button>
         </Flex>
@@ -38,10 +38,12 @@ export class Task extends React.Component<Props & TRemove, TState>{
 
 export const Checkbox = styled.input`
   align-self: center;
+  margin-right: 15px;
 `;
 
 export const Title = styled.h3`
-  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 export const Button = styled.button`
@@ -50,7 +52,6 @@ export const Button = styled.button`
 
 export const StyledTask = styled.li`
   display: flex;
-  justify-content: space-around;
   border: solid black 1px;
   padding: 5px;
   border-radius: 3px;
@@ -62,8 +63,9 @@ export const StyledTask = styled.li`
 
 export const Flex = styled.div<{
   justifyContent?: 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+  width?: string;
 }>`
-  width: 100%;
   display: flex;
   ${({ justifyContent }) => (justifyContent && `justify-content: ${justifyContent};`)}
+  ${({ width }) => `width: ${width};`}
 `;
