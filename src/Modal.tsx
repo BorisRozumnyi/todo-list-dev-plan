@@ -1,8 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import './App.css';
-import { TaskList } from './TaskList';
-import { Modal } from './Modal';
 
 export type TTask = {
   title: string; isCompleted: boolean, id: number
@@ -14,7 +11,7 @@ export type TRemove = {
 
 type TState = { editingTask?: TTask, taskList: TTask[], newTaskValue: string };
 
-class App extends React.Component<{}, TState> {
+export class Modal extends React.Component<{}, TState> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -65,22 +62,25 @@ class App extends React.Component<{}, TState> {
   };
 
   render() {
-    const { taskList, editingTask } = this.state;
-    const { handleClick, handleOpenEdit, handelCheck, handleChange, handleRemove } = this;
     return (
-      <StyledApp>
-        <h1>Todo List</h1>
-        <input type="text" name="new task name" placeholder="Enter the task name" onChange={handleChange} />
-        <button onClick={handleClick}>Add task</button>
-        <TaskList tasks={taskList} remove={handleRemove} check={handelCheck} openEdit={handleOpenEdit}/>
-        {editingTask && <Modal />}
-      </StyledApp>
+      <StyledModal>
+        <h2>Edit todo</h2>
+        <input type="text" name="new task name" placeholder="Enter the task name" onChange={this.handleChange} />
+        <button onClick={this.handleClick}>Save</button>
+      </StyledModal>
     );
   }
 };
 
-export default App;
-
-export const StyledApp = styled.section`
-  padding: 0 20px;
+const StyledModal = styled.section`
+  position: fixed;
+  top: 30%;
+  left: calc(50% - 150px);
+  width: 300px;
+  border: 1px solid;
+  background: #edf;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

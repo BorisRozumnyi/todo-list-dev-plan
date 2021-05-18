@@ -6,12 +6,13 @@ type Props = {
   title: string; isCompleted: boolean, id: number,
   remove: (id: number) => void;
   check: (id: number) => void;
+  openEdit: (id: number) => void;
 };
 
 type TState = { isCompleted: boolean, taskList: TTask[], newTaskValue: string };
 
-export class Task extends React.Component<Props & TRemove, TState>{
-  constructor(props: Props & TRemove) {
+export class Task extends React.Component<Props, TState>{
+  constructor(props: Props) {
     super(props);
     this.state = {
       isCompleted: false,
@@ -20,7 +21,7 @@ export class Task extends React.Component<Props & TRemove, TState>{
     };
   }
   render() {
-    const { title, id, isCompleted, remove, check } = this.props;
+    const { title, id, isCompleted, remove, check, openEdit } = this.props;
     return (
       <StyledTask key={id}>
         <Flex width='80%'>
@@ -29,7 +30,7 @@ export class Task extends React.Component<Props & TRemove, TState>{
         </Flex>
         <Flex width='20%' justifyContent='flex-end'>
           <Button onClick={() => remove(id)}>Remove</Button>
-          <Button>Edit</Button>
+          <Button onClick={() => openEdit(id)}>Edit</Button>
         </Flex>
       </StyledTask>
     );
