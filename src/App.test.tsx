@@ -3,60 +3,102 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { App } from './App';
 import { Task } from './Task';
 
-it('renders learn react link', () => {
-  render(<App test />);
-  const title = screen.getByText(/todo list/i);
-  expect(title).toBeInTheDocument();
-  const task = screen.queryByText(/add task/i);
-  expect(task).toBeInTheDocument();
-  expect(
-    screen.getByPlaceholderText(/enter the task name/i),
-  ).toBeInTheDocument();
-  expect(screen.getAllByRole('textbox')[0]).toHaveAttribute(
-    'name',
-    'new task name',
-  );
+const setup = () => {
+  const app = render(<App test />);
+  const createNewTaskInput = app.getByPlaceholderText(/enter the task name/i);
+  const createNewTaskButton = app.getByText(/add task/i);
+  const list = app.getByRole('list');
+  return {
+    createNewTaskInput,
+    createNewTaskButton,
+    list,
+    ...app,
+  };
+};
+
+it('renders the App', () => {
+  const { createNewTaskInput, getByText, queryAllByRole } = setup();
+  expect(getByText(/todo list/i)).toBeInTheDocument();
+  expect(createNewTaskInput).toBeInTheDocument();
+  expect(queryAllByRole('textbox')[0]).toHaveAttribute('name', 'new task name');
 });
 
-it('adding the new tasks, removing, checking', () => {
-  render(<App test />);
-  expect(screen.getByRole('list').childElementCount).toBe(0);
-  const input = screen.getByPlaceholderText('Enter the task name');
-  fireEvent.change(input, { target: { value: 'task 1' } });
-  expect(input.value).toBe('task 1');
-  fireEvent.click(screen.getByText(/add task/i));
-  expect(screen.getByRole('list').childElementCount).toBe(1);
-  expect(screen.getByText('task 1')).toBeInTheDocument();
+it('adding new tasks', () => {
+  const { createNewTaskInput, createNewTaskButton, list, getByText } = setup();
+  expect(list.childElementCount).toBe(0);
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  expect(createNewTaskInput.value).toBe('task 1');
+  fireEvent.click(createNewTaskButton);
+  expect(list.childElementCount).toBe(1);
+  expect(getByText('task 1')).toBeInTheDocument();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 2' } });
+  fireEvent.click(createNewTaskButton);
+  expect(list.childElementCount).toBe(2);
+  expect(getByText('task 2')).toBeInTheDocument();
+});
 
-  fireEvent.change(input, { target: { value: 'task 2' } });
-  fireEvent.click(screen.getByText(/add task/i));
-  expect(screen.getByRole('list').childElementCount).toBe(2);
-  expect(screen.getByText('task 2')).toBeInTheDocument();
+it('removing a task', () => {
+  const {
+    createNewTaskInput,
+    createNewTaskButton,
+    list,
+    queryByText,
+    queryAllByText,
+  } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 2' } });
+  fireEvent.click(createNewTaskButton);
 
-  fireEvent.click(screen.getAllByText(/remove/i)[1]);
-  expect(screen.getByRole('list').childElementCount).toBe(1);
-  expect(screen.getByText(/task 1/i)).toBeInTheDocument();
-  // expect(screen.getByText('task 2')).not.toBeInTheDocument();
+  fireEvent.click(queryAllByText(/remove/i)[1]);
+  expect(list.childElementCount).toBe(1);
+  expect(queryByText(/task 1/i)).toBeInTheDocument();
+  expect(queryByText('task 2')).toBeNull();
+});
 
-  expect(screen.getAllByRole('checkbox')[0].checked).toBe(false);
-  fireEvent.click(screen.getAllByRole('checkbox')[0]);
-  expect(screen.getAllByRole('checkbox')[0].checked).toBe(true);
-  fireEvent.click(screen.getAllByRole('checkbox')[0]);
-  expect(screen.getAllByRole('checkbox')[0].checked).toBe(false);
+it('checking', () => {
+  const { createNewTaskInput, createNewTaskButton, queryAllByRole } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
 
-  expect(screen.queryByText(/edit todo/i)).toBeNull();
-  fireEvent.click(screen.getAllByText(/edit/i)[0]);
-  expect(screen.queryByText(/edit todo/i)).toBeInTheDocument();
-  fireEvent.click(screen.getByTestId('close-edit-modal'));
-  expect(screen.queryByText(/edit todo/i)).toBeNull();
+  expect(queryAllByRole('checkbox')[0].checked).toBe(false);
+  fireEvent.click(queryAllByRole('checkbox')[0]);
+  expect(queryAllByRole('checkbox')[0].checked).toBe(true);
+  fireEvent.click(queryAllByRole('checkbox')[0]);
+  expect(queryAllByRole('checkbox')[0].checked).toBe(false);
+});
+
+it('open edit', () => {
+  const {
+    createNewTaskInput,
+    createNewTaskButton,
+    queryByText,
+    getAllByText,
+    getByTestId,
+  } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
+
+  expect(queryByText(/edit todo/i)).toBeNull();
+  fireEvent.click(getAllByText(/edit/i)[0]);
+  expect(queryByText(/edit todo/i)).toBeInTheDocument();
+  fireEvent.click(getByTestId('close-edit-modal'));
+  expect(queryByText(/edit todo/i)).toBeNull();
 });
 
 it('Task is rendered', () => {
-  const props = { title: 'title', isCompleted: false, id: 123 };
-  const { getByRole } = render(<Task {...props} />);
+  const props = {
+    title: 'title',
+    isCompleted: false,
+    id: 123,
+    remove: () => {},
+    check: () => {},
+    openEdit: () => {}
+  };
+  const { getByRole, getByText } = render(<Task {...props} />);
   const checkbox = getByRole('checkbox');
   expect(checkbox).toBeInTheDocument();
   expect(checkbox.checked).toBe(false);
-  expect(screen.getByText(/remove/i)).toBeInTheDocument();
-  expect(screen.getByText(/edit/i)).toBeInTheDocument();
+  expect(getByText(/remove/i)).toBeInTheDocument();
+  expect(getByText(/edit/i)).toBeInTheDocument();
 });
