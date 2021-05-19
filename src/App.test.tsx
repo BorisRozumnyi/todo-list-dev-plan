@@ -68,7 +68,7 @@ it('checking', () => {
   expect(queryAllByRole('checkbox')[0].checked).toBe(false);
 });
 
-it('open edit', () => {
+it('open and close the edit window', () => {
   const {
     createNewTaskInput,
     createNewTaskButton,

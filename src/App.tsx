@@ -68,7 +68,6 @@ export class App extends React.Component<Props, State> {
   };
 
   handleSaveEdit = (value: string) => {
-    console.log(value);
     const { taskList, editingTask } = this.state;
     const maped = taskList.map((task) => {
       if (task.id === editingTask?.id) task.title = value;
