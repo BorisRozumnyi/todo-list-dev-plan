@@ -26,7 +26,7 @@ export class App extends React.Component<Props, State> {
     };
   }
 
-  handleClick = () => {
+  handleCreateTask = () => {
     const { newTaskValue, taskList } = this.state;
     const newTask = {
       title: newTaskValue,
@@ -34,7 +34,7 @@ export class App extends React.Component<Props, State> {
       id: Date.now(),
     };
     const tasks = [...taskList, newTask];
-    this.setState({ taskList: tasks });
+    this.setState({ taskList: tasks, newTaskValue: '' });
   };
 
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -77,9 +77,9 @@ export class App extends React.Component<Props, State> {
   };
 
   render() {
-    const { taskList, editingTask } = this.state;
+    const { taskList, editingTask, newTaskValue } = this.state;
     const {
-      handleClick,
+      handleCreateTask,
       handleOpenEdit,
       handelCheck,
       handleChange,
@@ -94,9 +94,10 @@ export class App extends React.Component<Props, State> {
           type="text"
           name="new task name"
           placeholder="Enter the task name"
+          value={newTaskValue}
           onChange={handleChange}
         />
-        <button onClick={handleClick}>Add task</button>
+        <button onClick={handleCreateTask}>Add task</button>
         <TaskList
           tasks={taskList}
           remove={handleRemove}

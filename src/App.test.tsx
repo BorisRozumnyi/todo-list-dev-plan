@@ -37,6 +37,13 @@ it('adding new tasks', () => {
   expect(getByText('task 2')).toBeInTheDocument();
 });
 
+it('clear the add new task input', () => {
+  const { createNewTaskInput, createNewTaskButton } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
+  expect(createNewTaskInput.value).toBe('');
+});
+
 it('removing a task', () => {
   const {
     createNewTaskInput,
@@ -97,9 +104,11 @@ it('editing a task', () => {
   fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
   fireEvent.click(createNewTaskButton);
   fireEvent.click(getAllByText(/edit/i)[0]);
-  
+
   expect(queryByTestId('edit-task').value).toBe('task 1');
-  fireEvent.change(queryByTestId('edit-task'), { target: { value: 'task 1 was change' } });
+  fireEvent.change(queryByTestId('edit-task'), {
+    target: { value: 'task 1 was change' },
+  });
   fireEvent.click(queryByText(/save/i));
   expect(queryByText('task 1')).toBeNull();
   expect(queryByText('task 1 was change')).toBeInTheDocument();
