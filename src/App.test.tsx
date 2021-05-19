@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { App } from './App';
 import { Task } from './Task';
 
@@ -86,6 +86,25 @@ it('open edit', () => {
   expect(queryByText(/edit todo/i)).toBeNull();
 });
 
+it('editing a task', () => {
+  const {
+    createNewTaskInput,
+    createNewTaskButton,
+    queryByText,
+    getAllByText,
+    queryByTestId,
+  } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
+  fireEvent.click(getAllByText(/edit/i)[0]);
+  
+  expect(queryByTestId('edit-task').value).toBe('task 1');
+  fireEvent.change(queryByTestId('edit-task'), { target: { value: 'task 1 was change' } });
+  fireEvent.click(queryByText(/save/i));
+  expect(queryByText('task 1')).toBeNull();
+  expect(queryByText('task 1 was change')).toBeInTheDocument();
+});
+
 it('Task is rendered', () => {
   const props = {
     title: 'title',
@@ -93,7 +112,7 @@ it('Task is rendered', () => {
     id: 123,
     remove: () => {},
     check: () => {},
-    openEdit: () => {}
+    openEdit: () => {},
   };
   const { getByRole, getByText } = render(<Task {...props} />);
   const checkbox = getByRole('checkbox');

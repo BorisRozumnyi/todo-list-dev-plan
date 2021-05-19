@@ -5,41 +5,40 @@ import { TTask } from './App';
 type Props = {
   task: TTask;
   close: () => void;
+  save: (v: string) => void;
 };
 
-type TState = { editingTask?: TTask; taskList: TTask[]; newTaskValue: string };
+type TState = { newTaskValue: string };
 export class Modal extends React.Component<Props, TState> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      editingTask: undefined,
-      taskList: [],
       newTaskValue: '',
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSaveEdit = this.handleSaveEdit.bind(this);
   }
 
-  handleChange(e: React.FormEvent<HTMLInputElement>) {
+  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     this.setState({ newTaskValue: value });
-  }
-
-  handleSaveEdit() {
-    console.log('===');
-  }
+  };
 
   render() {
-    const { task, close } = this.props;
-    const { handleSaveEdit, handleChange } = this;
+    const { task, close, save } = this.props;
+    const { newTaskValue } = this.state;
+    const { handleChange } = this;
     return (
       <StyledModal>
         <Close data-testid="close-edit-modal" onClick={close}>
           x
         </Close>
         <h2>Edit todo</h2>
-        <input type="text" defaultValue={task.title} onChange={handleChange} />
-        <Save onClick={handleSaveEdit}>Save</Save>
+        <input
+          type="text"
+          data-testid="edit-task"
+          defaultValue={task.title}
+          onChange={handleChange}
+        />
+        <Save onClick={() => save(newTaskValue)}>Save</Save>
       </StyledModal>
     );
   }

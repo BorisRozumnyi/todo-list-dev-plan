@@ -67,6 +67,16 @@ export class App extends React.Component<Props, State> {
     this.setState({ editingTask: undefined });
   };
 
+  handleSaveEdit = (value: string) => {
+    console.log(value);
+    const { taskList, editingTask } = this.state;
+    const maped = taskList.map((task) => {
+      if (task.id === editingTask?.id) task.title = value;
+      return task;
+    });
+    this.setState({ editingTask: undefined, taskList: maped });
+  };
+
   render() {
     const { taskList, editingTask } = this.state;
     const {
@@ -76,6 +86,7 @@ export class App extends React.Component<Props, State> {
       handleChange,
       handleRemove,
       handleCloseEdit,
+      handleSaveEdit,
     } = this;
     return (
       <StyledApp>
@@ -93,7 +104,13 @@ export class App extends React.Component<Props, State> {
           check={handelCheck}
           openEdit={handleOpenEdit}
         />
-        {editingTask && <Modal task={editingTask} close={handleCloseEdit} />}
+        {editingTask && (
+          <Modal
+            task={editingTask}
+            close={handleCloseEdit}
+            save={handleSaveEdit}
+          />
+        )}
       </StyledApp>
     );
   }
