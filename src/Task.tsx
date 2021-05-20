@@ -5,7 +5,6 @@ import { TTask, TRemove } from "./App";
 type Props = {
   title: string; isCompleted: boolean, id: number,
   remove: (id: number) => void;
-  check: (id: number) => void;
 };
 
 type TState = { isCompleted: boolean, taskList: TTask[], newTaskValue: string };
@@ -20,12 +19,12 @@ export class Task extends React.Component<Props & TRemove, TState>{
     };
   }
   render() {
-    const { title, id, isCompleted, remove, check } = this.props;
+    const { title, id, isCompleted, remove } = this.props;
     return (
       <StyledTask key={id}>
         <Flex>
           <Title>{title}</Title>
-          <Checkbox type="checkbox" id="completed" checked={isCompleted} onChange={() => check(id)} />
+          <Checkbox type="checkbox" id="completed" checked={isCompleted} />
         </Flex>
         <Flex justifyContent='flex-end'>
           <Button onClick={() => remove(id)}>Remove</Button>

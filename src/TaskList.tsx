@@ -5,13 +5,12 @@ import { Task } from "./Task";
 
 type Props = {
   tasks: TTask[];
-  check: (id: number) => void;
 };
 
-export const TaskList: React.FC<Props & TRemove> = ({ tasks, remove, check }) => (
+export const TaskList: React.FC<Props & TRemove> = ({ tasks, remove }) => (
   <List>
     {tasks.map(({ title, isCompleted, id }) => {
-      const props = { title, isCompleted, id, remove, check };
+      const props = { title, isCompleted, id, remove };
       return <Task key={id} {...props} />
     })}
   </List>

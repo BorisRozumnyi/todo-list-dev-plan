@@ -14,7 +14,7 @@ it('renders learn react link', () => {
   expect(screen.getAllByRole('textbox')[0]).toHaveAttribute('name', 'new task name');
 });
 
-it('adding the new tasks, removing, checking', () => {
+it('adding and removing new tasks', () => {
   render(<App />);
   expect(screen.getByRole('list').childElementCount).toBe(0);
   const input = screen.getByPlaceholderText("Enter the task name");
@@ -33,18 +33,12 @@ it('adding the new tasks, removing, checking', () => {
   expect(screen.getByRole('list').childElementCount).toBe(1);
   expect(screen.getByText(/task 1/i)).toBeInTheDocument();
   // expect(screen.getByText('task 2')).not.toBeInTheDocument();
-
-  expect(screen.getAllByRole('checkbox')[0].checked).toBe(false);
-  fireEvent.click(screen.getAllByRole('checkbox')[0]);
-  expect(screen.getAllByRole('checkbox')[0].checked).toBe(true);
 });
 
 it('Task is rendered', () => {
   const props = { title: 'title', isCompleted: false, id: 123 };
-  const { getByRole } = render(<Task {...props} />);
-  const checkbox = getByRole('checkbox');
-  expect(checkbox).toBeInTheDocument();
-  expect(checkbox.checked).toBe(false);
+  render(<Task {...props} />);
+  expect(screen.getByRole('checkbox')).toBeInTheDocument();
   expect(screen.getByText(/remove/i)).toBeInTheDocument();
   expect(screen.getByText(/edit/i)).toBeInTheDocument();
 });
