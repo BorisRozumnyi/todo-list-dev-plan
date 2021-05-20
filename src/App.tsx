@@ -15,7 +15,7 @@ export type TRemove = {
 };
 
 type Props = { test: boolean };
-type State = { editingTask?: TTask; taskList: TTask[]; newTaskValue: string };
+type State = { editingTask?: TTask; taskList: TTask[] };
 
 export class App extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -23,25 +23,19 @@ export class App extends React.Component<Props, State> {
     this.state = {
       editingTask: undefined,
       taskList: [],
-      newTaskValue: '',
     };
   }
 
-  handleCreateTask = (e: React.FormEvent) => {
+  handleCreateTask = (e: React.FormEvent, newTaskValue: string) => {
     e.preventDefault();
-    const { newTaskValue, taskList } = this.state;
+    const { taskList } = this.state;
     const newTask = {
       title: newTaskValue,
       isCompleted: false,
       id: Date.now(),
     };
     const tasks = [...taskList, newTask];
-    this.setState({ taskList: tasks, newTaskValue: '' });
-  };
-
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
-    this.setState({ newTaskValue: value });
+    this.setState({ taskList: tasks });
   };
 
   handleRemove = (id: number) => {
@@ -79,12 +73,11 @@ export class App extends React.Component<Props, State> {
   };
 
   render() {
-    const { taskList, editingTask, newTaskValue } = this.state;
+    const { taskList, editingTask } = this.state;
     const {
       handleCreateTask,
       handleOpenEdit,
       handelCheck,
-      handleChange,
       handleRemove,
       handleCloseEdit,
       handleSaveEdit,
@@ -92,11 +85,7 @@ export class App extends React.Component<Props, State> {
     return (
       <StyledApp>
         <h1>Todo List</h1>
-        <CreateTaskForm
-          handleCreateTask={handleCreateTask}
-          handleChange={handleChange}
-          newTaskValue={newTaskValue}
-        />
+        <CreateTaskForm handleCreateTask={handleCreateTask} />
         <TaskList
           tasks={taskList}
           remove={handleRemove}

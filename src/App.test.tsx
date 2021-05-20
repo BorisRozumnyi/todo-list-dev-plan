@@ -49,7 +49,7 @@ it('creating a task by pressing the enter key', () => {
   const { createNewTaskInput, queryByText } = setup();
   fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
   expect(createNewTaskInput).toHaveValue('task 1');
-  userEvent.type(createNewTaskInput, `${specialChars.enter}`);
+  userEvent.type(createNewTaskInput, `${specialChars.enter}`); // the enter key down doesn't work
   expect(queryByText('task 1')).toBeInTheDocument();
 });
 
@@ -114,7 +114,6 @@ it('close the edit window by click outside', () => {
     createNewTaskInput,
     createNewTaskButton,
     queryAllByText,
-    getByText,
     queryByTestId,
   } = setup();
   fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
@@ -122,7 +121,7 @@ it('close the edit window by click outside', () => {
   fireEvent.click(queryAllByText(/edit/i)[0]);
 
   expect(queryByTestId('edit-modal')).toBeInTheDocument();
-  userEvent.click(getByText('Todo List'));
+  userEvent.click(document.body);
   expect(queryByTestId('edit-modal')).toBeNull();
 });
 
