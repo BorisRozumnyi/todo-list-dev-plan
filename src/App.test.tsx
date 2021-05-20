@@ -54,6 +54,17 @@ it('creating a task by pressing the enter key', () => {
   expect(queryByText('task 1')).toBeInTheDocument();
 });
 
+it('editing a task by pressing the enter key in the App', () => {
+  const { createNewTaskInput, createNewTaskButton, queryByText, queryByTestId, debug } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
+  fireEvent.click(queryByText(/edit/i));
+  fireEvent.change(queryByTestId('edit-input'), { target: { value: 'task 1 was change' } });
+  userEvent.type(queryByTestId('edit-input'), `${specialChars.enter}`); // the enter key down doesn't work
+  expect(queryByText('task 1')).not.toBeInTheDocument();
+  expect(queryByText('task 1 was change')).toBeInTheDocument();
+});
+
 it('clear the add new task input', () => {
   const { createNewTaskInput, createNewTaskButton } = setup();
   fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
@@ -138,8 +149,8 @@ it('editing a task', () => {
   fireEvent.click(createNewTaskButton);
   fireEvent.click(getAllByText(/edit/i)[0]);
 
-  expect(queryByTestId('edit-task')).toHaveValue('task 1');
-  fireEvent.change(queryByTestId('edit-task'), {
+  expect(queryByTestId('edit-input')).toHaveValue('task 1');
+  fireEvent.change(queryByTestId('edit-input'), {
     target: { value: 'task 1 was change' },
   });
   fireEvent.click(queryByText(/save/i));
@@ -151,7 +162,7 @@ it('The edit input has focus', () => {
   const { queryByTestId } = render(
     <Modal task={mockTask} close={() => {}} save={() => {}} />,
   );
-  const editInput = queryByTestId('edit-task');
+  const editInput = queryByTestId('edit-input');
   expect(editInput).toBeInTheDocument();
   expect(editInput).toHaveFocus();
 });

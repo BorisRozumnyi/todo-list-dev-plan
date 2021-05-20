@@ -38,10 +38,16 @@ export class Modal extends React.Component<Props, TState> {
     }
   };
 
+  handleKeyDownEnter = (e: any) => {
+    const { newTaskValue } = this.state;
+    const { save } = this.props;
+    if (e.key === 'Enter') save(newTaskValue);
+  };
+
   render() {
     const { task, close, save } = this.props;
     const { newTaskValue } = this.state;
-    const { handleChange } = this;
+    const { handleChange, handleKeyDownEnter } = this;
     return (
       <StyledModal ref={this.wrapperRef} data-testid="edit-modal">
         <Close data-testid="close-edit-modal" onClick={close}>
@@ -50,10 +56,11 @@ export class Modal extends React.Component<Props, TState> {
         <h2>Edit todo</h2>
         <input
           type="text"
-          data-testid="edit-task"
+          data-testid="edit-input"
           defaultValue={task.title}
           onChange={handleChange}
           autoFocus
+          onKeyDown={handleKeyDownEnter}
         />
         <Save onClick={() => save(newTaskValue)}>Save</Save>
       </StyledModal>
