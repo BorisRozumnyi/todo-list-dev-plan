@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import './App.css';
 import { TaskList } from './TaskList';
 import { Modal } from './Modal';
+import { CreateTaskForm } from './CreateTaskForm';
 
 export type TTask = {
   title: string;
@@ -91,16 +92,11 @@ export class App extends React.Component<Props, State> {
     return (
       <StyledApp>
         <h1>Todo List</h1>
-        <form onSubmit={handleCreateTask}>
-          <input
-            type="text"
-            name="new-task-name"
-            placeholder="Enter the task name"
-            value={newTaskValue}
-            onChange={handleChange}
-          />
-          <button onClick={handleCreateTask}>Add task</button>
-        </form>
+        <CreateTaskForm
+          handleCreateTask={handleCreateTask}
+          handleChange={handleChange}
+          newTaskValue={newTaskValue}
+        />
         <TaskList
           tasks={taskList}
           remove={handleRemove}
