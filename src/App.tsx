@@ -6,10 +6,6 @@ import { TaskList } from './TaskList';
 export type TTask = {
   title: string; isCompleted: boolean, id: number
 };
-export type TRemove = {
-  remove: (id: number) => void;
-};
-
 
 type TState = { isOpen: boolean, taskList: TTask[], newTaskValue: string };
 
@@ -23,7 +19,6 @@ class App extends React.Component<{}, TState> {
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleRemove = this.handleRemove.bind(this);
   };
 
   handleClick() {
@@ -41,19 +36,13 @@ class App extends React.Component<{}, TState> {
     this.setState({ newTaskValue: value });
   };
 
-  handleRemove(id: number) {
-    const { taskList } = this.state;
-    const filtered = taskList.filter(task => task.id !== id);
-    this.setState({ taskList: filtered });
-  };
-
   render() {
     return (
       <StyledApp>
         <h1>Todo List</h1>
         <input type="text" name="new task name" placeholder="Enter the task name" onChange={this.handleChange} />
         <button onClick={this.handleClick}>Add task</button>
-        <TaskList tasks={this.state.taskList} remove={this.handleRemove} />
+        <TaskList tasks={this.state.taskList} />
       </StyledApp>
     );
   }

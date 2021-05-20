@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { TTask, TRemove } from "./App";
+import { TTask } from "./App";
 
 type Props = {
-  title: string; isCompleted: boolean, id: number,
-  remove: (id: number) => void;
+  title: string; isCompleted: boolean, id: number
 };
 
 type TState = { isCompleted: boolean, taskList: TTask[], newTaskValue: string };
 
-export class Task extends React.Component<Props & TRemove, TState>{
-  constructor(props: Props & TRemove) {
+export class Task extends React.Component<Props, TState>{
+  constructor(props: Props) {
     super(props);
     this.state = {
       isCompleted: false,
@@ -19,7 +18,7 @@ export class Task extends React.Component<Props & TRemove, TState>{
     };
   }
   render() {
-    const { title, id, isCompleted, remove } = this.props;
+    const { title, id, isCompleted } = this.props;
     return (
       <StyledTask key={id}>
         <Flex>
@@ -27,7 +26,7 @@ export class Task extends React.Component<Props & TRemove, TState>{
           <Checkbox type="checkbox" id="completed" checked={isCompleted} />
         </Flex>
         <Flex justifyContent='flex-end'>
-          <Button onClick={() => remove(id)}>Remove</Button>
+          <Button>Remove</Button>
           <Button>Edit</Button>
         </Flex>
       </StyledTask>

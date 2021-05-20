@@ -31,21 +31,11 @@ it('adding new tasks', () => {
 });
 
 it('Task is rendered', () => {
-  const props = { title: 'title', isCompleted: false, id: 123 };
+  const props = {
+    title: 'title', isCompleted: false, id: 123,
+  };
   render(<Task {...props} />);
   expect(screen.getByRole('checkbox')).toBeInTheDocument();
   expect(screen.getByText(/remove/i)).toBeInTheDocument();
   expect(screen.getByText(/edit/i)).toBeInTheDocument();
-});
-
-it('Task was removed', () => {
-  const tasks = [
-    { title: 'title 1', isCompleted: false, id: 123 },
-    { title: 'title 2', isCompleted: false, id: 124 },
-  ];
-  render(<TaskList tasks={tasks} />);
-  expect(screen.getByRole('list').childElementCount).toBe(2);
-  fireEvent.click(screen.getAllByText(/remove/i)[1]);
-  expect(screen.getByRole('list').childElementCount).toBe(1);
-  expect(screen.getByText('title 2')).toBeNull();
 });
