@@ -4,6 +4,7 @@ import userEvent, { specialChars } from '@testing-library/user-event';
 import { App } from './App';
 import { Task } from './Task';
 import { Modal } from './Modal';
+import { debug } from 'console';
 
 const mockTask = {
   title: 'task 1',
@@ -144,6 +145,15 @@ it('editing a task', () => {
   fireEvent.click(queryByText(/save/i));
   expect(queryByText('task 1')).toBeNull();
   expect(queryByText('task 1 was change')).toBeInTheDocument();
+});
+
+it('The edit input has focus', () => {
+  const { queryByTestId } = render(
+    <Modal task={mockTask} close={() => {}} save={() => {}} />,
+  );
+  const editInput = queryByTestId('edit-task');
+  expect(editInput).toBeInTheDocument();
+  expect(editInput).toHaveFocus();
 });
 
 it('Task is rendered', () => {

@@ -53,6 +53,7 @@ export class Modal extends React.Component<Props, TState> {
           data-testid="edit-task"
           defaultValue={task.title}
           onChange={handleChange}
+          autoFocus
         />
         <Save onClick={() => save(newTaskValue)}>Save</Save>
       </StyledModal>
