@@ -1,23 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TTask } from './App';
 
-type Props = {
-  task: TTask;
-  close: () => void;
+export type TTask = {
+  title: string; isCompleted: boolean, id: number
+};
+export type TRemove = {
+  remove: (id: number) => void;
 };
 
+
 type TState = { editingTask?: TTask, taskList: TTask[], newTaskValue: string };
-export class Modal extends React.Component<Props, TState> {
-  constructor(props: Props) {
+
+export class Modal extends React.Component<{}, TState> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       editingTask: undefined,
       taskList: [],
       newTaskValue: '',
     };
+    this.handleClick = this.handleClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleSaveEdit = this.handleSaveEdit.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
+    this.handelCheck = this.handelCheck.bind(this);
+    this.handleOpenEdit = this.handleOpenEdit.bind(this);
+  };
+
+  handleClick() {
+    const { newTaskValue } = this.state;
+    const newTask = {
+      title: newTaskValue, isCompleted: false, id: Date.now(),
+    };
+    const tasks = [...this.state.taskList, newTask];
+    this.setState({ taskList: tasks })
   };
 
   handleChange(e: React.FormEvent<HTMLInputElement>) {
@@ -25,19 +40,33 @@ export class Modal extends React.Component<Props, TState> {
     this.setState({ newTaskValue: value });
   };
 
-  handleSaveEdit() {
-    console.log('===');
+  handleRemove(id: number) {
+    const { taskList } = this.state;
+    const filtered = taskList.filter(task => task.id !== id);
+    this.setState({ taskList: filtered });
+  };
+
+  handelCheck(id: number) {
+    const { taskList } = this.state;
+    const maped = taskList.map((task) => {
+      if (task.id === id) task.isCompleted = !task.isCompleted;
+      return task;
+    });
+    this.setState({ taskList: maped });
+  };
+
+  handleOpenEdit(id: number) {
+    const { taskList } = this.state;
+    const finded = taskList.find((task) => task.id === id);
+    this.setState({ editingTask: finded });
   };
 
   render() {
-    const { task, close } = this.props;
-    const { handleSaveEdit, handleChange } = this;
     return (
       <StyledModal>
-        <Close data-testid='close-edit-modal' onClick={close}>x</Close>
         <h2>Edit todo</h2>
-        <input type="text" defaultValue={task.title} onChange={handleChange} />
-        <Save onClick={handleSaveEdit}>Save</Save>
+        <input type="text" name="new task name" placeholder="Enter the task name" onChange={this.handleChange} />
+        <button onClick={this.handleClick}>Save</button>
       </StyledModal>
     );
   }
@@ -54,13 +83,4 @@ const StyledModal = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Close = styled.button`
-  position: absolute;
-  top: 3px;
-  right: 3px;
-`;
-const Save = styled.button`
-  margin-top: 3px;
 `;
