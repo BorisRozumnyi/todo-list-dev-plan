@@ -4,7 +4,6 @@ import userEvent, { specialChars } from '@testing-library/user-event';
 import { App } from './App';
 import { Task } from './Task';
 import { Modal } from './Modal';
-import { debug } from 'console';
 
 const mockTask = {
   title: 'task 1',
@@ -30,7 +29,7 @@ it('renders the App', () => {
   expect(getByText(/todo list/i)).toBeInTheDocument();
   expect(createNewTaskInput).toBeInTheDocument();
   expect(queryAllByRole('textbox')[0]).toHaveAttribute('name', 'new-task-name');
-});
+})
 
 it('adding new tasks', () => {
   const { createNewTaskInput, createNewTaskButton, list, getByText } = setup();

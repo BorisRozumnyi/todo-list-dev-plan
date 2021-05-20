@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import './App.css';
 import { TaskList } from './TaskList';
 import { Modal } from './Modal';
 import { CreateTaskForm } from './CreateTaskForm';
