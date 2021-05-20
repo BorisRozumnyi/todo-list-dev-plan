@@ -14,7 +14,7 @@ it('renders learn react link', () => {
   expect(screen.getAllByRole('textbox')[0]).toHaveAttribute('name', 'new task name');
 });
 
-it('adding and removing new tasks', () => {
+it('adding new tasks', () => {
   render(<App />);
   expect(screen.getByRole('list').childElementCount).toBe(0);
   const input = screen.getByPlaceholderText("Enter the task name");
@@ -28,11 +28,6 @@ it('adding and removing new tasks', () => {
   fireEvent.click(screen.getByText(/add task/i));
   expect(screen.getByRole('list').childElementCount).toBe(2);
   expect(screen.getByText('task 2')).toBeInTheDocument();
-
-  fireEvent.click(screen.getAllByText(/remove/i)[1]);
-  expect(screen.getByRole('list').childElementCount).toBe(1);
-  expect(screen.getByText(/task 1/i)).toBeInTheDocument();
-  // expect(screen.getByText('task 2')).not.toBeInTheDocument();
 });
 
 it('Task is rendered', () => {
@@ -41,4 +36,16 @@ it('Task is rendered', () => {
   expect(screen.getByRole('checkbox')).toBeInTheDocument();
   expect(screen.getByText(/remove/i)).toBeInTheDocument();
   expect(screen.getByText(/edit/i)).toBeInTheDocument();
+});
+
+it('Task was removed', () => {
+  const tasks = [
+    { title: 'title 1', isCompleted: false, id: 123 },
+    { title: 'title 2', isCompleted: false, id: 124 },
+  ];
+  render(<TaskList tasks={tasks} />);
+  expect(screen.getByRole('list').childElementCount).toBe(2);
+  fireEvent.click(screen.getAllByText(/remove/i)[1]);
+  expect(screen.getByRole('list').childElementCount).toBe(1);
+  expect(screen.getByText('title 2')).toBeNull();
 });
