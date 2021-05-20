@@ -1,25 +1,21 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { App } from './App';
+import App from './App';
 import { Task } from './Task';
+import { TaskList } from './TaskList';
 
 it('renders learn react link', () => {
-  render(<App test />);
+  render(<App />);
   const title = screen.getByText(/todo list/i);
   expect(title).toBeInTheDocument();
   const task = screen.queryByText(/add task/i);
   expect(task).toBeInTheDocument();
-  expect(
-    screen.getByPlaceholderText(/enter the task name/i),
-  ).toBeInTheDocument();
-  expect(screen.getAllByRole('textbox')[0]).toHaveAttribute(
-    'name',
-    'new task name',
-  );
+  expect(screen.getByPlaceholderText(/enter the task name/i)).toBeInTheDocument();
+  expect(screen.getAllByRole('textbox')[0]).toHaveAttribute('name', 'new task name');
 });
 
 it('adding the new tasks, removing, checking', () => {
-  render(<App test />);
+  render(<App />);
   expect(screen.getByRole('list').childElementCount).toBe(0);
   const input = screen.getByPlaceholderText('Enter the task name');
   fireEvent.change(input, { target: { value: 'task 1' } });

@@ -5,19 +5,16 @@ import { TaskList } from './TaskList';
 import { Modal } from './Modal';
 
 export type TTask = {
-  title: string;
-  isCompleted: boolean;
-  id: number;
+  title: string; isCompleted: boolean, id: number
 };
 export type TRemove = {
   remove: (id: number) => void;
 };
 
-type Props = { test: boolean };
-type State = { editingTask?: TTask; taskList: TTask[]; newTaskValue: string };
+type TState = { editingTask?: TTask, taskList: TTask[], newTaskValue: string };
 
-export class App extends React.Component<Props, State> {
-  constructor(props: Props) {
+class App extends React.Component<{}, TState> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       editingTask: undefined,
@@ -27,13 +24,11 @@ export class App extends React.Component<Props, State> {
   }
 
   handleClick = () => {
-    const { newTaskValue, taskList } = this.state;
+    const { newTaskValue } = this.state;
     const newTask = {
-      title: newTaskValue,
-      isCompleted: false,
-      id: Date.now(),
+      title: newTaskValue, isCompleted: false, id: Date.now(),
     };
-    const tasks = [...taskList, newTask];
+    const tasks = [...this.state.taskList, newTask];
     this.setState({ taskList: tasks });
   };
 
@@ -44,7 +39,7 @@ export class App extends React.Component<Props, State> {
 
   handleRemove = (id: number) => {
     const { taskList } = this.state;
-    const filtered = taskList.filter((task) => task.id !== id);
+    const filtered = taskList.filter(task => task.id !== id);
     this.setState({ taskList: filtered });
   };
 
@@ -69,36 +64,21 @@ export class App extends React.Component<Props, State> {
 
   render() {
     const { taskList, editingTask } = this.state;
-    const {
-      handleClick,
-      handleOpenEdit,
-      handelCheck,
-      handleChange,
-      handleRemove,
-      handleCloseEdit,
-    } = this;
+    const { handleClick, handleOpenEdit, handelCheck, handleChange, handleRemove, handleCloseEdit } = this;
     return (
       <StyledApp>
         <h1>Todo List</h1>
-        <input
-          type="text"
-          name="new task name"
-          placeholder="Enter the task name"
-          onChange={handleChange}
-        />
+        <input type="text" name="new task name" placeholder="Enter the task name" onChange={handleChange} />
         <button onClick={handleClick}>Add task</button>
-        <TaskList
-          tasks={taskList}
-          remove={handleRemove}
-          check={handelCheck}
-          openEdit={handleOpenEdit}
-        />
+        <TaskList tasks={taskList} remove={handleRemove} check={handelCheck} openEdit={handleOpenEdit}/>
         {editingTask && <Modal task={editingTask} close={handleCloseEdit} />}
       </StyledApp>
     );
   }
 }
 
-const StyledApp = styled.section`
+export default App;
+
+export const StyledApp = styled.section`
   padding: 0 20px;
 `;

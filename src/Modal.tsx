@@ -7,7 +7,7 @@ type Props = {
   close: () => void;
 };
 
-type TState = { editingTask?: TTask; taskList: TTask[]; newTaskValue: string };
+type TState = { editingTask?: TTask, taskList: TTask[], newTaskValue: string };
 export class Modal extends React.Component<Props, TState> {
   constructor(props: Props) {
     super(props);
@@ -34,9 +34,7 @@ export class Modal extends React.Component<Props, TState> {
     const { handleSaveEdit, handleChange } = this;
     return (
       <StyledModal>
-        <Close data-testid="close-edit-modal" onClick={close}>
-          x
-        </Close>
+        <Close data-testid='close-edit-modal' onClick={close}>x</Close>
         <h2>Edit todo</h2>
         <input type="text" defaultValue={task.title} onChange={handleChange} />
         <Save onClick={handleSaveEdit}>Save</Save>
