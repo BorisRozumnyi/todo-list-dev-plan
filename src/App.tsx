@@ -21,7 +21,7 @@ class App extends React.Component<{}, TState> {
       taskList: [],
       newTaskValue: '',
     };
-  }
+  };
 
   handleClick = () => {
     const { newTaskValue } = this.state;
@@ -29,7 +29,7 @@ class App extends React.Component<{}, TState> {
       title: newTaskValue, isCompleted: false, id: Date.now(),
     };
     const tasks = [...this.state.taskList, newTask];
-    this.setState({ taskList: tasks });
+    this.setState({ taskList: tasks })
   };
 
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -75,7 +75,7 @@ class App extends React.Component<{}, TState> {
       </StyledApp>
     );
   }
-}
+};
 
 export default App;
 
