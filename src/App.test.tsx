@@ -1,7 +1,15 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { App } from './App';
 import { Task } from './Task';
+import { Modal } from './Modal';
+
+const mockTask = {
+  title: 'task 1',
+  isCompleted: false,
+  id: 123,
+};
 
 const setup = () => {
   const app = render(<App test />);
@@ -91,6 +99,23 @@ it('open and close the edit window', () => {
   expect(queryByText(/edit todo/i)).toBeInTheDocument();
   fireEvent.click(getByTestId('close-edit-modal'));
   expect(queryByText(/edit todo/i)).toBeNull();
+});
+
+it('close the edit window by click outside', () => {
+  const {
+    createNewTaskInput,
+    createNewTaskButton,
+    queryAllByText,
+    getByText,
+    queryByTestId,
+  } = setup();
+  fireEvent.change(createNewTaskInput, { target: { value: 'task 1' } });
+  fireEvent.click(createNewTaskButton);
+  fireEvent.click(queryAllByText(/edit/i)[0]);
+
+  expect(queryByTestId('edit-modal')).toBeInTheDocument();
+  userEvent.click(getByText('Todo List'));
+  expect(queryByTestId('edit-modal')).toBeNull();
 });
 
 it('editing a task', () => {

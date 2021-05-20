@@ -17,9 +17,25 @@ export class Modal extends React.Component<Props, TState> {
     };
   }
 
+  private wrapperRef = React.createRef<HTMLDivElement>();
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     this.setState({ newTaskValue: value });
+  };
+
+  handleClickOutside = (e: any) => {
+    if (this.wrapperRef && !this.wrapperRef.current?.contains(e.target)) {
+      this.props.close();
+    }
   };
 
   render() {
@@ -27,7 +43,7 @@ export class Modal extends React.Component<Props, TState> {
     const { newTaskValue } = this.state;
     const { handleChange } = this;
     return (
-      <StyledModal>
+      <StyledModal ref={this.wrapperRef} data-testid="edit-modal">
         <Close data-testid="close-edit-modal" onClick={close}>
           x
         </Close>
@@ -44,7 +60,7 @@ export class Modal extends React.Component<Props, TState> {
   }
 }
 
-const StyledModal = styled.section`
+const StyledModal = styled.div`
   position: fixed;
   top: 30%;
   left: calc(50% - 150px);
