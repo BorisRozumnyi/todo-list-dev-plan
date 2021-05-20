@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import './App.css';
 import { TaskList } from './TaskList';
-import { Modal } from './Modal';
 
 export type TTask = {
   title: string; isCompleted: boolean, id: number
@@ -12,13 +11,13 @@ export type TRemove = {
 };
 
 
-type TState = { editingTask?: TTask, taskList: TTask[], newTaskValue: string };
+type TState = { isOpen: boolean, taskList: TTask[], newTaskValue: string };
 
 class App extends React.Component<{}, TState> {
   constructor(props: {}) {
     super(props);
     this.state = {
-      editingTask: undefined,
+      isOpen: false,
       taskList: [],
       newTaskValue: '',
     };
@@ -26,11 +25,11 @@ class App extends React.Component<{}, TState> {
     this.handleChange = this.handleChange.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handelCheck = this.handelCheck.bind(this);
-    this.handleOpenEdit = this.handleOpenEdit.bind(this);
   };
 
   handleClick() {
     const { newTaskValue } = this.state;
+    this.setState({ isOpen: !this.state.isOpen })
     const newTask = {
       title: newTaskValue, isCompleted: false, id: Date.now(),
     };
@@ -51,29 +50,34 @@ class App extends React.Component<{}, TState> {
 
   handelCheck(id: number) {
     const { taskList } = this.state;
-    const maped = taskList.map((task) => {
+    const filtered = taskList.map((task) => {
       if (task.id === id) task.isCompleted = !task.isCompleted;
       return task;
     });
-    this.setState({ taskList: maped });
+    this.setState({ taskList: filtered });
   };
 
-  handleOpenEdit(id: number) {
-    const { taskList } = this.state;
-    const finded = taskList.find((task) => task.id === id);
-    this.setState({ editingTask: finded });
-  };
+  // handleEdit(id: number) {
+  //   const { taskList } = this.state;
+  //   const filtered = taskList.map((task) => {
+  //     if (task.id === id) {
+  //       task.isCompleted = true;
+  //       return task;
+  //     }
+  //     return task;
+  //   });
+  //   this.setState({ taskList: filtered });
+  
+
+  // };
 
   render() {
-    const { taskList, editingTask } = this.state;
-    const { handleClick, handleOpenEdit, handelCheck, handleChange, handleRemove } = this;
     return (
       <StyledApp>
         <h1>Todo List</h1>
-        <input type="text" name="new task name" placeholder="Enter the task name" onChange={handleChange} />
-        <button onClick={handleClick}>Add task</button>
-        <TaskList tasks={taskList} remove={handleRemove} check={handelCheck} openEdit={handleOpenEdit}/>
-        {editingTask && <Modal />}
+        <input type="text" name="new task name" placeholder="Enter the task name" onChange={this.handleChange} />
+        <button onClick={this.handleClick}>Add task</button>
+        <TaskList tasks={this.state.taskList} remove={this.handleRemove} check={this.handelCheck} />
       </StyledApp>
     );
   }
