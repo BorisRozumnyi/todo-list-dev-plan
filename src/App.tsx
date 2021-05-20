@@ -26,7 +26,8 @@ export class App extends React.Component<Props, State> {
     };
   }
 
-  handleCreateTask = () => {
+  handleCreateTask = (e: React.FormEvent) => {
+    e.preventDefault();
     const { newTaskValue, taskList } = this.state;
     const newTask = {
       title: newTaskValue,
@@ -90,14 +91,16 @@ export class App extends React.Component<Props, State> {
     return (
       <StyledApp>
         <h1>Todo List</h1>
-        <input
-          type="text"
-          name="new task name"
-          placeholder="Enter the task name"
-          value={newTaskValue}
-          onChange={handleChange}
-        />
-        <button onClick={handleCreateTask}>Add task</button>
+        <form onSubmit={handleCreateTask}>
+          <input
+            type="text"
+            name="new-task-name"
+            placeholder="Enter the task name"
+            value={newTaskValue}
+            onChange={handleChange}
+          />
+          <button onClick={handleCreateTask}>Add task</button>
+        </form>
         <TaskList
           tasks={taskList}
           remove={handleRemove}
