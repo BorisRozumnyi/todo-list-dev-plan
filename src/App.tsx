@@ -6,9 +6,9 @@ export type TTask = {
   title: string; isCompleted: boolean, id: number
 };
 
-type TState = { isOpen: boolean, taskList: TTask[], newTaskValue: string };
+type MyState = { isOpen: boolean, taskList: TTask[], newTaskValue: string };
 
-class App extends React.Component<{}, TState> {
+class App extends React.Component<{}, MyState> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -45,6 +45,6 @@ class App extends React.Component<{}, TState> {
       </div>
     );
   }
-};
+}
 
 export default App;
