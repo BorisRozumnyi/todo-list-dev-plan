@@ -37,12 +37,6 @@ it('adding the new tasks, removing, checking', () => {
   expect(screen.getAllByRole('checkbox')[0].checked).toBe(false);
   fireEvent.click(screen.getAllByRole('checkbox')[0]);
   expect(screen.getAllByRole('checkbox')[0].checked).toBe(true);
-  fireEvent.click(screen.getAllByRole('checkbox')[0]);
-  expect(screen.getAllByRole('checkbox')[0].checked).toBe(false);
-
-  // expect(screen.queryByText(/edit todo/i)).toBeNull();
-  // fireEvent.click(screen.getAllByText(/edit/i)[0]);
-  // expect(screen.queryByText(/edit todo/i)).toBeInTheDocument();
 });
 
 it('Task is rendered', () => {

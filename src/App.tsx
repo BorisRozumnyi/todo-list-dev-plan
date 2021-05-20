@@ -51,25 +51,14 @@ class App extends React.Component<{}, TState> {
   handelCheck(id: number) {
     const { taskList } = this.state;
     const filtered = taskList.map((task) => {
-      if (task.id === id) task.isCompleted = !task.isCompleted;
+      if (task.id === id) {
+        task.isCompleted = true;
+        return task;
+      }
       return task;
     });
     this.setState({ taskList: filtered });
-  };
-
-  // handleEdit(id: number) {
-  //   const { taskList } = this.state;
-  //   const filtered = taskList.map((task) => {
-  //     if (task.id === id) {
-  //       task.isCompleted = true;
-  //       return task;
-  //     }
-  //     return task;
-  //   });
-  //   this.setState({ taskList: filtered });
-  
-
-  // };
+  }
 
   render() {
     return (
