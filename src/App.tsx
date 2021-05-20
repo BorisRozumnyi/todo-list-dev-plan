@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import './App.css';
+import { CostInput } from './CostInput';
 import { TaskList } from './TaskList';
 
 export type TTask = {
@@ -26,6 +27,7 @@ class App extends React.Component<{}, MyState> {
     const newTask = {
       title: newTaskValue, isCompleted: false, id: Date.now(),
     };
+    // this.state.taskList.push(newTask)
     const tasks = [...this.state.taskList, newTask];
     this.setState({ taskList: tasks })
   };
@@ -40,7 +42,9 @@ class App extends React.Component<{}, MyState> {
       <div className="App">
         <h1>Todo List</h1>
         <input type="text" name="new task name" placeholder="Enter the task name" onChange={this.handleChange} />
+        <CostInput />
         <button onClick={this.handleClick}>Add task</button>
+        {this.state.isOpen && <span>*</span>}
         <TaskList tasks={this.state.taskList} />
       </div>
     );
