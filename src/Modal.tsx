@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TTask } from './App';
 
@@ -8,65 +8,52 @@ type Props = {
   save: (v: string) => void;
 };
 
-type TState = { newTaskValue: string };
-export class Modal extends React.Component<Props, TState> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      newTaskValue: '',
+const useClickOutsede = (
+  ref: React.RefObject<HTMLInputElement>,
+  close: () => void,
+) => {
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLDivElement;
+      if (ref && !ref.current?.contains(target)) close();
     };
-  }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [ref]);
+};
 
-  private wrapperRef = React.createRef<HTMLDivElement>();
+export const Modal: React.FC<Props> = ({ task, close, save }) => {
+  const [newTaskValue, setNewTaskValue] = useState('');
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const wrapperRef = useRef(null);
+  useClickOutsede(wrapperRef, close);
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    this.setState({ newTaskValue: value });
+    setNewTaskValue(value);
   };
 
-  handleClickOutside = (e: any) => {
-    if (this.wrapperRef && !this.wrapperRef.current?.contains(e.target)) {
-      this.props.close();
-    }
-  };
-
-  handleKeyDownEnter = (e: any) => {
-    const { newTaskValue } = this.state;
-    const { save } = this.props;
+  const handleKeyDownEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') save(newTaskValue);
   };
 
-  render() {
-    const { task, close, save } = this.props;
-    const { newTaskValue } = this.state;
-    const { handleChange, handleKeyDownEnter } = this;
-    return (
-      <StyledModal ref={this.wrapperRef} data-testid="edit-modal">
-        <Close data-testid="close-edit-modal" onClick={close}>
-          x
-        </Close>
-        <h2>Edit todo</h2>
-        <input
-          type="text"
-          data-testid="edit-input"
-          defaultValue={task.title}
-          onChange={handleChange}
-          autoFocus
-          onKeyDown={handleKeyDownEnter}
-        />
-        <Save onClick={() => save(newTaskValue)}>Save</Save>
-      </StyledModal>
-    );
-  }
-}
+  return (
+    <StyledModal ref={wrapperRef} data-testid="edit-modal">
+      <Close data-testid="close-edit-modal" onClick={close}>
+        x
+      </Close>
+      <h2>Edit todo</h2>
+      <input
+        type="text"
+        data-testid="edit-input"
+        defaultValue={task.title}
+        onChange={handleChange}
+        autoFocus
+        onKeyDown={handleKeyDownEnter}
+      />
+      <Save onClick={() => save(newTaskValue)}>Save</Save>
+    </StyledModal>
+  );
+};
 
 const StyledModal = styled.div`
   position: fixed;
