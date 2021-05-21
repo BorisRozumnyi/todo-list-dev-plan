@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { TTask } from './App';
 
 type Props = {
   title: string;
@@ -11,38 +10,32 @@ type Props = {
   openEdit: (id: number) => void;
 };
 
-type TState = { isCompleted: boolean; taskList: TTask[]; newTaskValue: string };
-
-export class Task extends React.Component<Props, TState> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      isCompleted: false,
-      taskList: [],
-      newTaskValue: '',
-    };
-  }
-  render() {
-    const { title, id, isCompleted, remove, check, openEdit } = this.props;
-    return (
-      <StyledTask key={id}>
-        <Flex width="80%">
-          <Checkbox
-            type="checkbox"
-            id="completed"
-            checked={isCompleted}
-            onChange={() => check(id)}
-          />
-          <Title>{title}</Title>
-        </Flex>
-        <Flex width="20%" justifyContent="flex-end">
-          <Button onClick={() => remove(id)}>Remove</Button>
-          <Button onClick={() => openEdit(id)}>Edit</Button>
-        </Flex>
-      </StyledTask>
-    );
-  }
-}
+export const Task: React.FC<Props> = ({
+  title,
+  id,
+  isCompleted,
+  remove,
+  check,
+  openEdit,
+}) => {
+  return (
+    <StyledTask key={id}>
+      <Flex width="80%">
+        <Checkbox
+          type="checkbox"
+          id="completed"
+          checked={isCompleted}
+          onChange={() => check(id)}
+        />
+        <Title>{title}</Title>
+      </Flex>
+      <Flex width="20%" justifyContent="flex-end">
+        <Button onClick={() => remove(id)}>Remove</Button>
+        <Button onClick={() => openEdit(id)}>Edit</Button>
+      </Flex>
+    </StyledTask>
+  );
+};
 
 export const Checkbox = styled.input`
   align-self: center;
