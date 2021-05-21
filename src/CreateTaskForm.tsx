@@ -1,43 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 type Props = {
   handleCreateTask: (e: React.FormEvent, value: string) => void;
 };
-type State = { newTaskValue: string };
 
-export class CreateTaskForm extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      newTaskValue: '',
-    };
-  }
-  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+export const CreateTaskForm: React.FC<Props> = ({ handleCreateTask }) => {
+  const [newTaskValue, setNewTaskValue] = useState('');
+
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
-    this.setState({ newTaskValue: value });
+    setNewTaskValue(value);
   };
 
-  handleClick = (e: any) => {
-    const { newTaskValue } = this.state;
-    const { handleCreateTask } = this.props;
+  const handleClick = (e: React.FormEvent<Element>) => {
     handleCreateTask(e, newTaskValue);
-    this.setState({ newTaskValue: '' });
+    setNewTaskValue('');
   };
 
-  render() {
-    const { newTaskValue } = this.state;
-    const { handleChange, handleClick } = this;
-    return (
-      <form>
-        <input
-          type="text"
-          name="new-task-name"
-          placeholder="Enter the task name"
-          value={newTaskValue}
-          onChange={handleChange}
-        />
-        <button onClick={handleClick}>Add task</button>
-      </form>
-    );
-  }
-}
+  return (
+    <form>
+      <input
+        type="text"
+        name="new-task-name"
+        placeholder="Enter the task name"
+        value={newTaskValue}
+        onChange={handleChange}
+      />
+      <button onClick={handleClick}>Add task</button>
+    </form>
+  );
+};
