@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-  handleCreateTask: (e: React.FormEvent, value: string) => void;
+  save: (value: string) => void;
 };
 type State = { newTaskValue: string };
 
@@ -17,27 +17,34 @@ export class CreateTaskForm extends React.Component<Props, State> {
     this.setState({ newTaskValue: value });
   };
 
-  handleClick = (e: any) => {
+  handleClick = () => {
     const { newTaskValue } = this.state;
-    const { handleCreateTask } = this.props;
-    handleCreateTask(e, newTaskValue);
+    const { save } = this.props;
+    save(newTaskValue);
     this.setState({ newTaskValue: '' });
+  };
+
+  handleKeyDownEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { newTaskValue } = this.state;
+    const { save } = this.props;
+    if (e.key === 'Enter') save(newTaskValue);
   };
 
   render() {
     const { newTaskValue } = this.state;
-    const { handleChange, handleClick } = this;
+    const { handleChange, handleClick, handleKeyDownEnter } = this;
     return (
-      <form>
+      <>
         <input
           type="text"
           name="new-task-name"
           placeholder="Enter the task name"
           value={newTaskValue}
           onChange={handleChange}
+          onKeyDown={handleKeyDownEnter}
         />
         <button onClick={handleClick}>Add task</button>
-      </form>
+      </>
     );
   }
 }

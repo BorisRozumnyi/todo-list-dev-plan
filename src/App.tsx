@@ -25,8 +25,7 @@ export class App extends React.Component<Props, State> {
     };
   }
 
-  handleCreateTask = (e: React.FormEvent, newTaskValue: string) => {
-    e.preventDefault();
+  handleCreateTask = (newTaskValue: string) => {
     const { taskList } = this.state;
     const newTask = {
       title: newTaskValue,
@@ -84,7 +83,7 @@ export class App extends React.Component<Props, State> {
     return (
       <StyledApp>
         <h1>Todo List</h1>
-        <CreateTaskForm handleCreateTask={handleCreateTask} />
+        <CreateTaskForm save={handleCreateTask} />
         <TaskList
           tasks={taskList}
           remove={handleRemove}
