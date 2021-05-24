@@ -16,8 +16,7 @@ export const App: React.FC<Props> = () => {
   const [editingTask, setEditingTask] = useState<TTask | undefined>(undefined);
   const [taskList, setTaskList] = useState([] as TTask[]);
 
-  const handleCreateTask = (e: React.FormEvent, newTaskValue: string) => {
-    e.preventDefault();
+  const handleCreateTask = (newTaskValue: string) => {
     const newTask = {
       title: newTaskValue,
       isCompleted: false,
@@ -61,7 +60,7 @@ export const App: React.FC<Props> = () => {
   return (
     <StyledApp>
       <h1>Todo List</h1>
-      <CreateTaskForm handleCreateTask={handleCreateTask} />
+      <CreateTaskForm save={handleCreateTask} />
       <TaskList
         tasks={taskList}
         remove={handleRemove}

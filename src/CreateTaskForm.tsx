@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 type Props = {
-  handleCreateTask: (e: React.FormEvent, value: string) => void;
+  save: (value: string) => void;
 };
 
-export const CreateTaskForm: React.FC<Props> = ({ handleCreateTask }) => {
+export const CreateTaskForm: React.FC<Props> = ({ save }) => {
   const [newTaskValue, setNewTaskValue] = useState('');
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -12,21 +12,26 @@ export const CreateTaskForm: React.FC<Props> = ({ handleCreateTask }) => {
     setNewTaskValue(value);
   };
 
-  const handleClick = (e: React.FormEvent<Element>) => {
-    handleCreateTask(e, newTaskValue);
+  const handleClick = () => {
+    save(newTaskValue);
     setNewTaskValue('');
   };
 
+  const handleKeyDownEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') save(newTaskValue);
+  };
+
   return (
-    <form>
+    <>
       <input
         type="text"
         name="new-task-name"
         placeholder="Enter the task name"
         value={newTaskValue}
         onChange={handleChange}
+        onKeyDown={handleKeyDownEnter}
       />
       <button onClick={handleClick}>Add task</button>
-    </form>
+    </>
   );
 };
