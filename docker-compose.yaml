@@ -1,0 +1,43 @@
+version: "3"
+services:
+  strapi:
+    image: strapi/strapi
+    environment:
+      DATABASE_CLIENT: mongo
+      DATABASE_NAME: strapi
+      DATABASE_HOST: mongo
+      DATABASE_PORT: 27017
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+    volumes:
+      - ./strapi-todo/app:/srv/app
+    ports:
+      - "1337:1337"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: strapi
+      MONGO_INITDB_ROOT_USERNAME: strapi
+      MONGO_INITDB_ROOT_PASSWORD: strapi
+    volumes:
+      - ./strapi-todo/data:/data/db
+
+  frontend:
+    build: ./frontend
+    restart: on-failure
+    container_name: ${PROJECT_NAME}_frontend
+    image: ${PROJECT_NAME}_frontend
+    volumes:
+      - ./frontend:/usr/src/app/frontend
+    ports:
+      - "${DOCKER_FRONTEND_PORT}:3000"
+    working_dir: /usr/src/app/frontend
+    command: yarn
+    command: yarn start
+    stdin_open: true
+    depends_on:
+      - mongo
+      - strapi
