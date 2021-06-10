@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { App } from './App';
+import { GlobalStyle } from './globalStyle';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyle />
     <App test />
   </React.StrictMode>,
   document.getElementById('root'),
