@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { TaskList } from './TaskList';
 import { Modal } from './Modal';
 import { CreateTaskForm } from './CreateTaskForm';
+
+const apiUrls = {
+  todos: 'http://localhost:1337/todos',
+};
 
 export type TTask = {
   title: string;
@@ -16,19 +21,33 @@ export const App: React.FC<Props> = () => {
   const [editingTask, setEditingTask] = useState<TTask | undefined>(undefined);
   const [taskList, setTaskList] = useState([] as TTask[]);
 
+  useEffect(() => {
+    axios.get(apiUrls.todos).then((response) => {
+      setTaskList(response.data);
+    });
+  }, []);
+
   const handleCreateTask = (newTaskValue: string) => {
     const newTask = {
       title: newTaskValue,
       isCompleted: false,
-      id: Date.now(),
     };
-    const tasks = [...taskList, newTask];
-    setTaskList(tasks);
+
+    axios.post(apiUrls.todos, newTask).then((response) => {
+      const tasks = [...taskList, response.data];
+      setTaskList(tasks);
+    });
   };
 
   const handleRemove = (id: number) => {
-    const filtered = taskList.filter((task) => task.id !== id);
-    setTaskList(filtered);
+    axios.delete(`${apiUrls.todos}/${id}`).then((response) => {
+      const copyTodos = taskList.slice();
+      const findedIndex = copyTodos.findIndex(
+        (todo) => todo.id === response.data.id,
+      );
+      copyTodos.splice(findedIndex, 1);
+      setTaskList(copyTodos);
+    });
   };
 
   const handleCheck = (id: number) => {
@@ -49,12 +68,19 @@ export const App: React.FC<Props> = () => {
   };
 
   const handleSaveEdit = (value: string) => {
-    const maped = taskList.map((task) => {
-      if (task.id === editingTask?.id) task.title = value;
-      return task;
-    });
     setEditingTask(undefined);
-    setTaskList(maped);
+    axios
+      .put(`${apiUrls.todos}/${editingTask?.id}`, {
+        title: value,
+      })
+      .then((response) => {
+        const copyTodos = taskList.slice();
+        const findedIndex = copyTodos.findIndex(
+          (todo) => todo.id === response.data.id,
+        );
+        copyTodos.splice(findedIndex, 1, response.data);
+        setTaskList(copyTodos);
+      });
   };
 
   return (
